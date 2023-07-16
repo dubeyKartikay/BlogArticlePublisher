@@ -1,8 +1,10 @@
 require('dotenv').config();
 function revalidateStaticWeb(){
     return new Promise((resolve,reject)=>{
-        secret = process.envMY_SECRET_TOKEN;
+        secret = process.env.MY_SECRET_TOKEN;
+
         fetch("https://melange-blog.vercel.app/api/revalidate",{
+            method: "POST",
             headers:{
                 "content-type" : "application/json"
             },
@@ -12,7 +14,11 @@ function revalidateStaticWeb(){
                 res.json().then((dat)=>{
                     console.log(typeof(dat));
                     console.log(dat);
-                    resolve(dat);
+                    if(dat.message == "Invalid token"){
+                        reject("Invalid Token");
+                    }else{
+                        resolve(dat);
+                    }
                 }).catch((err)=>{
                     console.log(err);
                     reject(err);
@@ -21,6 +27,7 @@ function revalidateStaticWeb(){
                 res.json().then((dat)=>{
                     console.log(typeof(dat));
                     console.log(dat);
+
                     reject(dat);
                 }).catch((err)=>{
                     reject(err);

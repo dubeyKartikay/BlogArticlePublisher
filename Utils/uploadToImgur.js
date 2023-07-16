@@ -1,5 +1,6 @@
 const path = require("path");
 var fs = require('fs');
+const {LOADING_STATES} = require("./loadingStates");
 require('dotenv').config()
 async function uploadLocalImagesToImgur(data){
   markdownStr = data.content;

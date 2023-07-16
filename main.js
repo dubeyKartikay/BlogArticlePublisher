@@ -7,9 +7,10 @@ const { throwError } = require("./Utils/ejsErrorUtils");
 const {LOADING_STATES,calcProgressPercent} = require("./Utils/loadingStates");
 const {sendProgress} = require("./Utils/progress");
 const revalidateStaticWeb = require("./Utils/revalidate");
+let win;
 const createWindow = () => {
   console.log(path.join(__dirname, "UI/scripts/preload.js"));
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -26,8 +27,10 @@ const createWindow = () => {
 
 
 ipcMain.on("form-submission", async (event, data) => {
+  sendProgress(LOADING_STATES.PARSING_DATA);
   try{
     await parseAndProcess(data);
+    sendProgress(LOADING_STATES.UPLOADING_THUMBNAIL_TO_IMGUR);
     data.img = await uploadToImgur(data.img);
     sendProgress(LOADING_STATES.INSERTING_IN_MONGODB);
     await insertData(data);
@@ -35,20 +38,27 @@ ipcMain.on("form-submission", async (event, data) => {
       sendProgress(LOADING_STATES.UPLOADING_TO_GITHUB);
       await uploadFileToGitHub(data);
       sendProgress(LOADING_STATES.PUBLISHING);
-      //revalidate
-      await revalidateStaticWeb()
-      sendProgress(LOADING_STATES.DONE);
+        try{
+          await revalidateStaticWeb()
+          sendProgress(LOADING_STATES.DONE);
+        }catch(err){
+          sendProgress(LOADING_STATES.ERROR,0,err.message);
+          throwError({title : "Error occured",message : err.message})
+        }
     }catch(err){
-      console.log(err);
       try{
         await rollback(data);
       }catch(err){
+        sendProgress(LOADING_STATES.ERROR,0,err.message);
+        throwError({title : "Error occured",message : err.message})
+      }finally{
+        sendProgress(LOADING_STATES.ERROR,0,err.message);
         throwError({title : "Error occured",message : err.message})
       }
-      throwError({title : "Error occured",message : err.message})
     }
   }catch(err){
     console.log(err);
+    sendProgress(LOADING_STATES.ERROR,0,err.message);
     throwError({title : "Error occured",message : err.message})
   }
   
@@ -73,9 +83,10 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 async function parseAndProcess(data) {
-  sendProgress(LOADING_STATES.PARSING_DATA);
+  // sendProgress(LOADING_STATES.PARSING_DATA);
   // sets the date attribute and uploads the local image files referenced in the markdown to imgur
   try {
+    sendProgress(LOADING_STATES.UPLOADING_LOCAL_TO_IMGUR);
     data.content = await uploadLocalImagesToImgur(data);
     
   } catch (err) {
@@ -84,4 +95,19 @@ async function parseAndProcess(data) {
   }
   data.date = new Date();
   data._id = `${data.heading}.md`;
+}
+
+function sendProgress(STATE,progress = 0,message = null){
+  if(win==null){
+    throw new Error("Must have a win oject to send progress to");
+  }
+  let data = {
+      STATE:STATE,
+      progress:progress,
+      message : message
+  }
+  if(progress==0){
+      data.progress = calcProgressPercent(STATE);
+  }
+  win.webContents.send('updateProgress',data);
 }

@@ -157,6 +157,9 @@ async function handleContentFile(file) {
   console.log(contentFile);
   displayPreviewContent(file, dropAreaContent);
 }
+function getContentPath(){
+  return contentFile.path;
+}
 const readFile = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

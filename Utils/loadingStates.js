@@ -12,5 +12,5 @@ function calcProgressPercent(STATE){
     return STATE*(100/6);
 }
 
-Object.freeze(LOADING_STATES)
-module.exports=(LOADING_STATES,calcProgressPercent);
+// Object.freeze(LOADING_STATES)
+module.exports={LOADING_STATES,calcProgressPercent};

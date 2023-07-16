@@ -76,3 +76,17 @@ body {
 .submit:hover{
 	box-shadow: 4px 4px 50px #d23d0e;
 }
+
+.progress-bar {
+  width: 300px;
+  height: 20px;
+  border: 1px solid #ccc;
+  background-color: #f2f2f2;
+}
+
+.progress {
+  width: 0%;
+  height: 100%;
+  background-color: #4CAF50;
+  transition: width 0.3s ease-in-out;
+}

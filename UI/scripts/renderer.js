@@ -22,7 +22,7 @@ async function sendForm(event) {
     readingTime: time.value,
     img: imageFileData,
     content: blogMarkDown,
-    content_path: getCseontentPath(),
+    content_path: getContentPath(),
   };
 
   ipcRenderer.send("form-submission", data);
