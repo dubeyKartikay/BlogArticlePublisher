@@ -1,39 +1,78 @@
+body {
+  background-color: #f9e5ca;
+}
 .center {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.highlight {
-  border-color: #ff0000;
-  background-color: #ffdddd;
-}
-.drop-area {
-  width: 300px;
+/* .highlight {
+  border-color: #d15a54;
+  background-color: #f9e5ca;
+} */
+.drop-area {	
+	position: relative;
+	cursor: pointer;
+	width: 300px;
+	max-width: 300px;
   height: 200px;
-  border: 2px dashed #ccc;
+  max-height: 200px;
+  border: 2px dashed #000;
   border-radius: 5px;
   text-align: center;
   padding: 20px;
   font-size: 1.2em;
   margin: 20px auto;
+  position: relative;
+	transition: all 0.5s;
+	background-size: contain;
+	overflow: scroll;
 }
 
-.error-message {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background-color: #ffdddd;
-    color: #ff0000;
-    font-weight: bold;
-    border: 2px solid #ff0000;
-    border-radius: 5px;
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-  }
-  
-  .error-message.show {
-    opacity: 1;
-  }
+
+.drop-area.highlight {
+  border-color: #d15a54;
+  background-color: #d15a54d3;
+	color: #f9e5ca;
+}
+.errorBox{
+	opacity: 0;
+	border-radius: 8px;
+	top : -20%;
+	transition: all 0.9s;
+	color: #f9e5ca;
+}
+
+.error-file {
+	padding: 2rem;
+  background-color: #ff3333;
+	box-shadow: 4px 4px 50px #d15a54;
+	top : 0;
+	opacity: 1;
+}
+
+.file-selected{
+	/* margin: 16px; */
+	background-size: 90%;
+	background-repeat: no-repeat;
+	background-position: center;
+	border-style: solid;
+	border-color: #d15a54;
+	/* outline: 1px solid #d15a54; */
+}
+
+.submit{
+	display: block;
+	margin: 0 auto;
+	padding: 1rem 2rem;
+	font-size: 20px;
+	background: #d23d0e;
+	border: none;
+	border-radius: 12px;
+	color: #f9e5ca;
+	transition: all 0.9s;
+}
+
+.submit:hover{
+	box-shadow: 4px 4px 50px #d23d0e;
+}

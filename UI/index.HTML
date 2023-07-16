@@ -1,34 +1,76 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; img-src 'self' blob: data:;"
+    />
     <title>Hello World!</title>
-    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/inputfield.css" />
   </head>
   <body>
     <form id="form" enctype="multipart/form-data">
-        <!-- <label for="heading">Heading</label> -->
-        <div class="center">
-          <input required type="text" name="heading" id="heading" placeholder="Heading">
-          <br>
+      <!-- <label for="heading">Heading</label> -->
+      <div class="center">
+        <div class="container">
+          <div class="box">
+            <input
+              required
+              type="text"
+              name="heading"
+              id="heading"
+              
+            />
+            <span>Heading</span>
+          </div>
+          <br />
           <!-- <label for="subhead">Sub Heading</label> -->
-          <textarea required name="subhead" id="subhead" cols="30" rows="3" placeholder="Sub Heading"></textarea>
-          <br>
+          <div class="box">
+
+            <textarea
+              required
+              name="subhead"
+              id="subhead"
+              cols="30"
+              rows="3"
+              
+            ></textarea>
+            <span>Sub Heading</span>
+          </div>
+          <br />
           <!-- <label for="time">Time to read</label> -->
-          <input required type="text" name="time" id="time" placeholder="Time to read">
-          <br>
+          <div class="box">
+            <input
+              required
+              type="text"
+              name="time"
+              id="time"
+              
+            />
+            <span>Time to read</span>
+          </div>
+          <br />
           <!-- <label for="image">Image</label> -->
-          <div  type="file" name="image" id="image"></div>
-          <br>
+          <div class="drop-area" id="image">
+            <div class="errorBox" ></div>
+            <span>Drag and Drop Image file here</span>
+          </div>
+          <br />
           <!-- <label for="content">Markdown File</label> -->
-          <input required type="file" name="content" id="content">
-          <br>
-          <input type="submit" value="Submit" >
+          <div class="drop-area" id="content">
+            <div class="errorBox" ></div>
+            <span>Drag and Drop markdown file here</span>
+          </div>
+          <br />
+          <input class="submit" type="submit" value="Submit" />
         </div>
+      </div>
     </form>
-    <div class="error-message" > Error occurred while handling the file. </div>
+    <div class="error-message">Error occurred while handling the file.</div>
+    <script src="./scripts/fileHandling.js"></script>
     <script src="./scripts/renderer.js"></script>
     <!-- <script src="./scripts/preload.js"></script> -->
   </body>
