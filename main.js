@@ -4,7 +4,7 @@ const { uploadLocalImagesToImgur, uploadToImgur } = require("./Utils/uploadToImg
 const { insertData, rollback } = require("./Utils/mongoDbUtils");
 const { uploadFileToGitHub } = require("./Utils/gitHubUtils");
 const { throwError } = require("./Utils/ejsErrorUtils");
-const {LOADING_STATES,calcProgressPercent} = require("./Utils/loadingStates");
+const {LOADING_STATES,calcProgressPercent,stateMessages} = require("./Utils/loadingStates");
 const revalidateStaticWeb = require("./Utils/revalidate");
 let win;
 const createWindow = () => {
@@ -23,26 +23,23 @@ const createWindow = () => {
 };
 
 
-
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 ipcMain.on("form-submission", async (event, data) => {
   sendProgress(LOADING_STATES.PARSING_DATA);
   try{
+    
     await parseAndProcess(data);
     sendProgress(LOADING_STATES.UPLOADING_THUMBNAIL_TO_IMGUR);
-    const thumbnailres = await uploadToImgur(data.img);
-    console.log(thumbnailres);
-    if(thumbnailres.success == false){
-      console.log(thumbnailres);
-      throw new Error("Unable to upload thumbnail to imgur")
-    }else{
-      data.img = thumbnailres.data.link ;
-    }
+    
+    await uploadThumbnail(data);
     sendProgress(LOADING_STATES.INSERTING_IN_MONGODB);
+    
     await insertData(data);
     try{
       sendProgress(LOADING_STATES.UPLOADING_TO_GITHUB);
       await uploadFileToGitHub(data);
+      
       sendProgress(LOADING_STATES.PUBLISHING);
         try{
           await revalidateStaticWeb()
@@ -90,6 +87,17 @@ app
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
+async function uploadThumbnail(data) {
+  const thumbnailres = await uploadToImgur(data.img);
+  console.log(thumbnailres);
+  if (thumbnailres.success == false) {
+    console.log(thumbnailres);
+    throw new Error("Unable to upload thumbnail to imgur");
+  } else {
+    data.img = thumbnailres.data.link;
+  }
+}
+
 async function parseAndProcess(data) {
   // sendProgress(LOADING_STATES.PARSING_DATA);
   // sets the date attribute and uploads the local image files referenced in the markdown to imgur
@@ -118,6 +126,9 @@ function sendProgress(STATE,progress = 0,message = null){
   }
   if(progress==0){
       data.progress = calcProgressPercent(STATE);
+  }
+  if(message == null){
+    data.message = stateMessages(STATE);
   }
   win.webContents.send('updateProgress',data);
 }

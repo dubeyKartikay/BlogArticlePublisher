@@ -6,10 +6,6 @@ function connect() {
     auth: process.env.GITHUB_PAT,
   });
 }
-// headers: {
-//     'X-GitHub-Api-Version': '2022-11-28'
-//   }
-
 async function uploadFileToGitHub(data) {
   const fileTitle = data._id;
   const fileContent = Base64.encode(data.content);

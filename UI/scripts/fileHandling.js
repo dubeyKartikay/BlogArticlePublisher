@@ -37,6 +37,19 @@ dropAreaContent.addEventListener(
   openFileExplorer.bind(null, "content")
 );
 
+function resetFiles(){
+  dropAreaImage.style.backgroundImage = "";
+  dropAreaImage.children[1].innerText = "Drag and Drop Image file here"
+  removeErrorMsg(dropAreaImage);
+  dropAreaImage.classList.remove("file-selected");
+
+  dropAreaContent.children[1].innerText = "Drag and Drop markdown file here";
+  removeErrorMsg(dropAreaContent)
+  dropAreaContent.classList.remove("file-selected");
+
+
+}
+
 function displayPreviewImage(file, previewElement) {
   const src = URL.createObjectURL(file);
   previewElement.style.backgroundImage = `url(${src})`

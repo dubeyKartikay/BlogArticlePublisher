@@ -5,9 +5,15 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; img-src 'self' blob: data:;"
+      content="default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com ;script-src 'self'; img-src 'self' blob: data:;"
     />
     <title>Hello World!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles/styles.css" />
     <link rel="stylesheet" href="styles/inputfield.css" />
   </head>
@@ -17,61 +23,54 @@
       <div class="center">
         <div class="container">
           <div class="box">
-            <input
-              required
-              type="text"
-              name="heading"
-              id="heading"
-              
-            />
+            <input required type="text" name="heading" id="heading" />
             <span>Heading</span>
           </div>
           <br />
           <!-- <label for="subhead">Sub Heading</label> -->
           <div class="box">
-
             <textarea
               required
               name="subhead"
               id="subhead"
               cols="30"
               rows="3"
-              
             ></textarea>
             <span>Sub Heading</span>
           </div>
           <br />
           <!-- <label for="time">Time to read</label> -->
           <div class="box">
-            <input
-              required
-              type="text"
-              name="time"
-              id="time"
-              
-            />
+            <input required type="text" name="time" id="time" />
             <span>Time to read</span>
           </div>
           <br />
           <!-- <label for="image">Image</label> -->
           <div class="drop-area" id="image">
-            <div class="errorBox" ></div>
+            <div class="errorBox"></div>
             <span>Drag and Drop Image file here</span>
           </div>
           <br />
           <!-- <label for="content">Markdown File</label> -->
           <div class="drop-area" id="content">
-            <div class="errorBox" ></div>
+            <div class="errorBox"></div>
             <span>Drag and Drop markdown file here</span>
           </div>
-          <br />
-          <input class="submit" type="submit" value="Submit" />
+          <div id="progress-bar" class="progress-bar">
+            <div id="progress" class="progress"></div>
+            <span class="progress-text"></span>
+          </div>
+          <input id="submit" class="submit" type="submit" value="Submit" />
+          <input
+            id="reset"
+            type="reset"
+            class="submit hide-submit"
+            value="🔄 Reset form"
+          />
         </div>
       </div>
     </form>
-    <div class="progress-bar">
-      <div id="progress" class="progress"></div>
-    </div>
+
     <!-- <script src="./scripts/preload.js"></script> -->
     <script src="./scripts/fileHandling.js"></script>
     <script src="./scripts/renderer.js"></script>

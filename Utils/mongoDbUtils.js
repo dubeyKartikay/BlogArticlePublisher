@@ -54,9 +54,9 @@ async function rollback(data) {
     // Select the database and collection
     const db = client.db(dbName);
     const collection = db.collection("blogs");
-
-    const result = await collection.deleteOne({ "_id": data._id });
-    console.log(`deleted ${_id} document into the blogs collection.`);
+    console.log(data._id);
+    const result = await collection.deleteOne({ _id: data._id });
+    console.log(`deleted ${data._id} document from the blogs collection.`);
   } catch (error) {
     console.log(
       "Error occurred while deleting data please delete the data from mongodb manually",

@@ -1,5 +1,6 @@
 // const { ipcRenderer } = window;
 document.getElementById("form").addEventListener("submit", sendForm);
+document.getElementById("reset").addEventListener("click", resetForm);
 async function sendForm(event) {
   event.preventDefault();
   // const imageFileData = await getInputFile("image");
@@ -25,5 +26,11 @@ async function sendForm(event) {
     content_path: getContentPath(),
   };
   // console.log(btoa(data.content));
+  
   ipcRender.send("form-submission", data);
+  window.scrollTo(0, document.body.scrollHeight);
+}
+function resetForm(){
+  resetFiles();
+  resetProgess();
 }
