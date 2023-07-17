@@ -1,5 +1,6 @@
 const { Octokit } = require("octokit");
 const {Base64} = require('js-base64');
+const log = require('electron-log');
 require("dotenv").config();
 function connect() {
   return new Octokit({
@@ -26,7 +27,7 @@ async function uploadFileToGitHub(data) {
       });
     if(res.status != "200" &&  res.status != "201"){
         await res.data;
-        console.log(res.data);
+        log.debug(res.data);
         throw new Error("Unable to upload to github")
     }
     await res.data;
@@ -36,7 +37,7 @@ async function uploadFileToGitHub(data) {
     }
   }
   catch (err){
-    console.log(err);
+    log.error(err);
     throw new Error("Error Uploading file to github")
   }
   

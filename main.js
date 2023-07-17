@@ -8,7 +8,6 @@ const {LOADING_STATES,calcProgressPercent,stateMessages} = require("./Utils/load
 const revalidateStaticWeb = require("./Utils/revalidate");
 let win;
 const createWindow = () => {
-  console.log(path.join(__dirname, "UI/scripts/preload.js"));
   win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -21,9 +20,6 @@ const createWindow = () => {
   win.loadFile("./UI/index.HTML");
   win.webContents.openDevTools();
 };
-
-
-const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 ipcMain.on("form-submission", async (event, data) => {
   sendProgress(LOADING_STATES.PARSING_DATA);
@@ -46,25 +42,21 @@ ipcMain.on("form-submission", async (event, data) => {
           sendProgress(LOADING_STATES.DONE);
         }catch(err){
           sendProgress(LOADING_STATES.ERROR,0,err.message);
-          throwError({title : "Error occured",message : err.message})
+          throwError({title : "Error occured",err:err})
         }
     }catch(err){
-      console.log(err);
+      sendProgress(LOADING_STATES.ERROR,0,err.message);
+      throwError({title : "Error occured",err:err})
       try{
         await rollback(data);
       }catch(err){
         sendProgress(LOADING_STATES.ERROR,0,err.message);
-        throwError({title : "Error occured",message : err.message})
-      }finally{
-    
-        sendProgress(LOADING_STATES.ERROR,0,err.message);
-        throwError({title : "Error occured",message : err.message})
+        throwError({title : "Error occured",err:err})
       }
     }
   }catch(err){
-    console.log(err);
     sendProgress(LOADING_STATES.ERROR,0,err.message);
-    throwError({title : "Error occured",message : err.message})
+    throwError({title : "Error occured",err:err})
   }
   
  

@@ -1,5 +1,6 @@
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
+const log = require('electron-log');
 const url = process.env.MONGODB_URL;
 const dbName = process.env.DB_NAME;
 // Function to connect to MongoDB
@@ -14,13 +15,13 @@ async function connectToMongoDB() {
 
     // Connect to the MongoDB server
     await client.connect();
-
+    
     console.log("Connected to MongoDB.");
 
     // Return the client and database object
     return client;
   } catch (error) {
-    console.log("Error occurred while connecting to MongoDB:", error);
+    log.error("Error occurred while connecting to MongoDB:", error);
     throw new Error("Error occurred while connecting to MongoDB:");
   }
 }
@@ -39,7 +40,7 @@ async function insertData(data) {
       `Inserted ${result.insertedId} document into the blogs collection.`
     );
   } catch (error) {
-    console.log("Error occurred while inserting data:", error);
+    log.error("Error occurred while inserting data:", error);
     throw new Error("Error occurred while inserting data");
   } finally {
     // Close the connection
@@ -58,7 +59,7 @@ async function rollback(data) {
     const result = await collection.deleteOne({ _id: data._id });
     console.log(`deleted ${data._id} document from the blogs collection.`);
   } catch (error) {
-    console.log(
+    log.error(
       "Error occurred while deleting data please delete the data from mongodb manually",
       error
     );

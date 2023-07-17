@@ -1,4 +1,5 @@
 require('dotenv').config();
+const log = require('electron-log');
 function revalidateStaticWeb(){
     return new Promise((resolve,reject)=>{
         secret = process.env.MY_SECRET_TOKEN;
@@ -12,28 +13,29 @@ function revalidateStaticWeb(){
         }).then((res)=>{
             if(res.status == 200){
                 res.json().then((dat)=>{
-                    console.log(typeof(dat));
-                    console.log(dat);
+                    log.info(dat)
                     if(dat.message == "Invalid token"){
+                        log.error("Invalid Token")
+                        log.error(dat)
                         reject("Invalid Token");
                     }else{
                         resolve(dat);
                     }
                 }).catch((err)=>{
-                    console.log(err);
+                    log.error(err)
                     reject(err);
                 })
             }else{
                 res.json().then((dat)=>{
-                    console.log(typeof(dat));
-                    console.log(dat);
-
+                    log.error("revalidate request failed, state != 200")
+                    log.info(dat)
                     reject(dat);
                 }).catch((err)=>{
-                    reject(err);
+                    log.error(err)
                 })
             }
         }).catch((err)=>{
+            log.error(err)
             reject(err);
         })
     })

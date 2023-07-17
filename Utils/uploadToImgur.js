@@ -3,6 +3,7 @@ var fs = require('fs');
 const {LOADING_STATES} = require("./loadingStates");
 require('dotenv').config()
 const { ImgurClient } = require('imgur');
+const log = require('electron-log');
 async function uploadLocalImagesToImgur(data){
   markdownStr = data.content;
   const imagePattern = /!\[.*?\]\((.*?)\)/g;
@@ -19,13 +20,13 @@ async function uploadLocalImagesToImgur(data){
       const imageData = await readImage(imagePath);
       const res = await uploadToImgur(imageData);
       newLink = res.data.link;
-      // console.log(res);
+      log.debug(res)
     }
     catch (err){
       throw err
     }
     if(newLink == null){
-      console.log(res)
+      log.debug(res)
       throw new Error("Unable to upload images to imgur");
     }
     modifiedMarkdown = modifiedMarkdown.replace(localImagePath,newLink);
@@ -60,7 +61,7 @@ function uploadToImgur(fileData){
       }).then((res)=>{
         resolve(res);
       }).catch((err)=>{
-        console.log(err);
+        log.error(err)
         reject(err)
       })
     });
