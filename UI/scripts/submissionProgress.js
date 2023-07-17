@@ -12,7 +12,7 @@ function setProgress(state,progress, errorMessage = '') {
     }
   }
 
-ipcRenderer.on("updateProgress",(evt,msg)=>{
+ipcRender.receive("updateProgress",(msg)=>{
     const {STATE,progress,message} = msg;
     setProgress(STATE,progress,message);
 })

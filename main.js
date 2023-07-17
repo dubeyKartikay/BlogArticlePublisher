@@ -5,7 +5,6 @@ const { insertData, rollback } = require("./Utils/mongoDbUtils");
 const { uploadFileToGitHub } = require("./Utils/gitHubUtils");
 const { throwError } = require("./Utils/ejsErrorUtils");
 const {LOADING_STATES,calcProgressPercent} = require("./Utils/loadingStates");
-const {sendProgress} = require("./Utils/progress");
 const revalidateStaticWeb = require("./Utils/revalidate");
 let win;
 const createWindow = () => {
@@ -31,7 +30,14 @@ ipcMain.on("form-submission", async (event, data) => {
   try{
     await parseAndProcess(data);
     sendProgress(LOADING_STATES.UPLOADING_THUMBNAIL_TO_IMGUR);
-    data.img = await uploadToImgur(data.img);
+    const thumbnailres = await uploadToImgur(data.img);
+    console.log(thumbnailres);
+    if(thumbnailres.success == false){
+      console.log(thumbnailres);
+      throw new Error("Unable to upload thumbnail to imgur")
+    }else{
+      data.img = thumbnailres.data.link ;
+    }
     sendProgress(LOADING_STATES.INSERTING_IN_MONGODB);
     await insertData(data);
     try{
@@ -46,12 +52,14 @@ ipcMain.on("form-submission", async (event, data) => {
           throwError({title : "Error occured",message : err.message})
         }
     }catch(err){
+      console.log(err);
       try{
         await rollback(data);
       }catch(err){
         sendProgress(LOADING_STATES.ERROR,0,err.message);
         throwError({title : "Error occured",message : err.message})
       }finally{
+    
         sendProgress(LOADING_STATES.ERROR,0,err.message);
         throwError({title : "Error occured",message : err.message})
       }
@@ -85,6 +93,9 @@ app.on("window-all-closed", () => {
 async function parseAndProcess(data) {
   // sendProgress(LOADING_STATES.PARSING_DATA);
   // sets the date attribute and uploads the local image files referenced in the markdown to imgur
+  data.content_path = extractDir(data.content_path);
+  data.date = new Date();
+  data._id = `${data.heading}.md`;
   try {
     sendProgress(LOADING_STATES.UPLOADING_LOCAL_TO_IMGUR);
     data.content = await uploadLocalImagesToImgur(data);
@@ -93,8 +104,7 @@ async function parseAndProcess(data) {
     console.log(err);
     throw new Error("Unable to Upload Images in MarkDown File to Imgur");
   }
-  data.date = new Date();
-  data._id = `${data.heading}.md`;
+  
 }
 
 function sendProgress(STATE,progress = 0,message = null){
@@ -110,4 +120,9 @@ function sendProgress(STATE,progress = 0,message = null){
       data.progress = calcProgressPercent(STATE);
   }
   win.webContents.send('updateProgress',data);
+}
+
+
+function extractDir(filePath){
+    return path.dirname(filePath);
 }

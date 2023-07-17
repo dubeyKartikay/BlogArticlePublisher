@@ -24,6 +24,6 @@ async function sendForm(event) {
     content: blogMarkDown,
     content_path: getContentPath(),
   };
-
-  ipcRenderer.send("form-submission", data);
+  // console.log(btoa(data.content));
+  ipcRender.send("form-submission", data);
 }

@@ -1,4 +1,5 @@
 const { Octokit } = require("octokit");
+const {Base64} = require('js-base64');
 require("dotenv").config();
 function connect() {
   return new Octokit({
@@ -11,7 +12,7 @@ function connect() {
 
 async function uploadFileToGitHub(data) {
   const fileTitle = data._id;
-  const fileContent = btoa(data.content);
+  const fileContent = Base64.encode(data.content);
   const octokit = connect();
   const owner = process.env.GITHUB_OWNER;
   const repo = process.env.GITHUB_REPO;

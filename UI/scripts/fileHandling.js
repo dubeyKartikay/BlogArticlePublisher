@@ -2,6 +2,8 @@ let imageFile = null;
 let imageFileData = null;
 let contentFile = null;
 let blogMarkDown = null;
+
+
 // Add event listeners for drag and drop
 const dropAreaImage = document.getElementById("image");
 const dropAreaContent = document.getElementById("content");
@@ -129,8 +131,13 @@ function handleDropContent(event) {
   }
 }
 async function handleImageFile(file) {
+  if(!(file.type.startsWith("image/"))){
+    handleErrorFile(dropAreaImage,"Dropped File not an Image file");
+    return;
+  }
   try{
     imageFileData = await readFile(file);
+    imageFileData = imageFileData.replace(/^data:image\/[a-z]+;base64,/, "");
   }catch(e){
     console.log(e);
     handleErrorFile(dropAreaImage)
@@ -147,6 +154,10 @@ async function handleImageFile(file) {
 }
 
 async function handleContentFile(file) {
+  if(file.path.substring(file.path.length-3,file.path.length) != ".md"){
+    handleErrorFile(dropAreaContent,"Dropped File not a Markdown File");
+    return;
+  }
   blogMarkDown = await readFile(file);
   if (!blogMarkDown) {
     handleErrorFile(dropAreaContent);
