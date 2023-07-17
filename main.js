@@ -6,8 +6,10 @@ const { uploadFileToGitHub } = require("./Utils/gitHubUtils");
 const { throwError } = require("./Utils/ejsErrorUtils");
 const {LOADING_STATES,calcProgressPercent,stateMessages} = require("./Utils/loadingStates");
 const revalidateStaticWeb = require("./Utils/revalidate");
+const log = require('electron-log');
 let win;
 const createWindow = () => {
+  console.log(log.transports.file.getFile())
   win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -74,7 +76,7 @@ app
     });
   })
   .catch((err) => {
-    console.log(err);
+    log.error(err);
   });
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
@@ -83,7 +85,7 @@ async function uploadThumbnail(data) {
   const thumbnailres = await uploadToImgur(data.img);
   console.log(thumbnailres);
   if (thumbnailres.success == false) {
-    console.log(thumbnailres);
+    log.error(thumbnailres);
     throw new Error("Unable to upload thumbnail to imgur");
   } else {
     data.img = thumbnailres.data.link;
@@ -101,7 +103,7 @@ async function parseAndProcess(data) {
     data.content = await uploadLocalImagesToImgur(data);
     
   } catch (err) {
-    console.log(err);
+    log.error(err);
     throw new Error("Unable to Upload Images in MarkDown File to Imgur");
   }
   
