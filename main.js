@@ -9,7 +9,8 @@ const revalidateStaticWeb = require("./Utils/revalidate");
 const log = require('electron-log');
 let win;
 const createWindow = () => {
-  console.log(log.transports.file.getFile())
+  // console.log(log.transports.file.getFile())
+  
   win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -17,10 +18,12 @@ const createWindow = () => {
       nodeIntegration: false,
       preload: path.join(__dirname, "UI/scripts/preload.js"),
     },
+    icon:"icons/Avatar.icns"
   });
-
+  
   win.loadFile("./UI/index.HTML");
-  win.webContents.openDevTools();
+  win.setTitle("Melange Blog Article publisher");
+  // win.webContents.openDevTools();
 };
 
 ipcMain.on("form-submission", async (event, data) => {

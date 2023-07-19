@@ -5,18 +5,31 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron-forge start",
+    "make": "electron-forge make",
+    "package": "electron-forge package"
   },
   "author": "Kartikay Dubey",
   "license": "MIT",
   "dependencies": {
+    "@electron-forge/maker-dmg": "^6.2.1",
+    "@electron-forge/maker-wix": "^6.2.1",
     "dotenv": "^16.3.1",
-    "electron": "^25.2.0",
     "electron-log": "^4.4.8",
+    "electron-squirrel-startup": "^1.0.0",
     "imgur": "^2.3.0",
     "js-base64": "^3.7.5",
     "mongodb": "^5.7.0",
     "octokit": "^3.0.0",
     "tslib": "^2.6.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "electron": "^25.3.0"
   }
 }
