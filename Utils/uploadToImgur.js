@@ -1,7 +1,7 @@
 const path = require("path");
 var fs = require('fs');
 const {LOADING_STATES} = require("./loadingStates");
-require('dotenv').config()
+const secrets = require('../secrets');
 const { ImgurClient } = require('imgur');
 const log = require('electron-log');
 async function uploadLocalImagesToImgur(data){
@@ -20,7 +20,7 @@ async function uploadLocalImagesToImgur(data){
       const imageData = await readImage(imagePath);
       const res = await uploadToImgur(imageData);
       newLink = res.data.link;
-      // log.debug(res)
+      log.debug(res)
     }
     catch (err){
       throw err
@@ -53,7 +53,7 @@ function readImage (imgPath){
 }
 function uploadToImgur(fileData){
     return new Promise((resolve, reject) => {
-      const CLIENT_ID = process.env.IMGUR_CLIENT_ID;
+      const CLIENT_ID = secrets.IMGUR_CLIENT_ID;
       const client = new ImgurClient({ clientId: CLIENT_ID });
       client.upload({
         image: fileData,

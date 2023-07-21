@@ -1,15 +1,20 @@
-require('dotenv').config();
+const secrets = require('../secrets');
 const log = require('electron-log');
-function revalidateStaticWeb(){
+const paths = new Map([
+    ["blogs","/"],
+    ["editorials",'/editorials'],
+    ["devlogs","/devlogs"]
+])
+function revalidateStaticWeb(data){
     return new Promise((resolve,reject)=>{
-        secret = process.env.MY_SECRET_TOKEN;
+        const secret = secrets.MY_SECRET_TOKEN;
 
         fetch("https://melange-blog.vercel.app/api/revalidate",{
             method: "POST",
             headers:{
                 "content-type" : "application/json"
             },
-            body : JSON.stringify({"secret":secret})
+            body : JSON.stringify({"secret":secret,"path":paths.get(data.collection)})
         }).then((res)=>{
             if(res.status == 200){
                 res.json().then((dat)=>{

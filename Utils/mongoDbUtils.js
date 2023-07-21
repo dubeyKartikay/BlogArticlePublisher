@@ -1,8 +1,8 @@
 const { MongoClient } = require("mongodb");
-require("dotenv").config();
+const secrets = require('../secrets');
 const log = require('electron-log');
-const url = process.env.MONGODB_URL;
-const dbName = process.env.DB_NAME;
+const url = secrets.MONGODB_URL;
+const dbName = secrets.DB_NAME;
 // Function to connect to MongoDB
 async function connectToMongoDB() {
   try {

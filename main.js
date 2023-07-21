@@ -42,7 +42,7 @@ ipcMain.on("form-submission", async (event, data) => {
       
       sendProgress(LOADING_STATES.PUBLISHING);
         try{
-          await revalidateStaticWeb()
+          await revalidateStaticWeb(data)
           sendProgress(LOADING_STATES.DONE);
         }catch(err){
           sendProgress(LOADING_STATES.ERROR,0,err.message);

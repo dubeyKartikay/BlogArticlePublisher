@@ -1,19 +1,19 @@
 const { Octokit } = require("octokit");
 const {Base64} = require('js-base64');
 const log = require('electron-log');
-require("dotenv").config();
+const secrets = require('../secrets');
 function connect() {
   return new Octokit({
-    auth: process.env.GITHUB_PAT,
+    auth: secrets.GITHUB_PAT,
   });
 }
 async function uploadFileToGitHub(data) {
   const fileTitle = data._id;
   const fileContent = Base64.encode(data.content);
   const octokit = connect();
-  const owner = process.env.GITHUB_OWNER;
-  const repo = process.env.GITHUB_REPO;
-  const path = fileTitle;
+  const owner = secrets.GITHUB_OWNER;
+  const repo = secrets.GITHUB_REPO;
+  const path = encodeURI(fileTitle);
   try{
     const res = await octokit.request(`PUT /repos/${owner}/${repo}/contents/${path}`, {
         owner: owner,
