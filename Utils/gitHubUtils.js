@@ -32,9 +32,9 @@ async function uploadFileToGitHub(data) {
     }
     await res.data;
 
-    if(res.status == 201){
-        console.log(res.data);
-    }
+    // if(res.status == 201){
+    //     // console.log(res.data);
+    // }
   }
   catch (err){
     log.error(err);

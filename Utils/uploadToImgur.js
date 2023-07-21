@@ -20,7 +20,7 @@ async function uploadLocalImagesToImgur(data){
       const imageData = await readImage(imagePath);
       const res = await uploadToImgur(imageData);
       newLink = res.data.link;
-      log.debug(res)
+      // log.debug(res)
     }
     catch (err){
       throw err

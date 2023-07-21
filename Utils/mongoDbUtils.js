@@ -33,7 +33,7 @@ async function insertData(data) {
     // Connect to MongoDB
     // Select the database and collection
     const db = client.db(dbName);
-    const collection = db.collection("blogs");
+    const collection = db.collection(data.collection);
 
     const result = await collection.insertOne(mongodbData);
     console.log(
@@ -54,10 +54,10 @@ async function rollback(data) {
     // Connect to MongoDB
     // Select the database and collection
     const db = client.db(dbName);
-    const collection = db.collection("blogs");
+    const collection = db.collection(data.collection);
     console.log(data._id);
     const result = await collection.deleteOne({ _id: data._id });
-    console.log(`deleted ${data._id} document from the blogs collection.`);
+    console.log(`deleted ${data._id} document from the ${data.collection} collection.`);
   } catch (error) {
     log.error(
       "Error occurred while deleting data please delete the data from mongodb manually",

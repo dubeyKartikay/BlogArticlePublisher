@@ -29,7 +29,6 @@ const createWindow = () => {
 ipcMain.on("form-submission", async (event, data) => {
   sendProgress(LOADING_STATES.PARSING_DATA);
   try{
-    
     await parseAndProcess(data);
     sendProgress(LOADING_STATES.UPLOADING_THUMBNAIL_TO_IMGUR);
     

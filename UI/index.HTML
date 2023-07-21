@@ -45,6 +45,9 @@
             <input required type="text" name="time" id="time" />
             <span>Time to read</span>
           </div>
+
+
+
           <br />
           <!-- <label for="image">Image</label> -->
           <div class="drop-area" id="image">
@@ -56,6 +59,14 @@
           <div class="drop-area" id="content">
             <div class="errorBox"></div>
             <span>Drag and Drop markdown file here</span>
+          </div>
+          <div class="collection-select-container" >
+            <span class="collection-heading" >Collection</span>
+            <select name="collection" id="collection">
+              <option value="blogs">Game dev Blog</option>
+              <option value="devlogs">Dev logs</option>
+              <option value="editorials">Editorials</option>
+            </select>
           </div>
           <div id="progress-bar" class="progress-bar">
             <div id="progress" class="progress"></div>

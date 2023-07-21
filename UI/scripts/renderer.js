@@ -16,7 +16,7 @@ async function sendForm(event) {
     handleErrorFile(dropAreaContent);
     return;
   }
-  const { heading, subhead, time } = event.target;
+  const { heading, subhead, time,collection } = event.target;
   const data = {
     heading: heading.value,
     subHeading: subhead.value,
@@ -24,6 +24,7 @@ async function sendForm(event) {
     img: imageFileData,
     content: blogMarkDown,
     content_path: getContentPath(),
+    collection:collection.value,
   };
   // console.log(btoa(data.content));
   

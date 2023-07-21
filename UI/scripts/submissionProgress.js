@@ -14,6 +14,7 @@ function setProgress(state, progress, message = "") {
     progressTextElement.innerText = `Error: ${message}`;
     resetButton.classList.remove("hide-submit");
     resetButton.classList.add("reset-error");
+    submitButton.classList.remove("hide-submit");
     window.scrollTo(0, document.body.scrollHeight);
   } else {
     message = message == "" ? `${progress}%` : message;

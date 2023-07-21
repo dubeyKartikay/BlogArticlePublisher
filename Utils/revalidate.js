@@ -13,7 +13,7 @@ function revalidateStaticWeb(){
         }).then((res)=>{
             if(res.status == 200){
                 res.json().then((dat)=>{
-                    log.info(dat)
+                    // log.info(dat)
                     if(dat.message == "Invalid token"){
                         log.error("Invalid Token")
                         log.error(dat)
